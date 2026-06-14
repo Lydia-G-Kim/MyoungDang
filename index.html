@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>명당 Prototype</title>
+
+  <link href="css/style.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <div class="logo" onclick="goHome()">
+        명당
+        <span class="logo-sub">
+          AI 기반 주거 추천 플랫폼
+        </span>
+      </div>
+      <div class="steps">
+        <div class="step active" onclick="moveTo('lrod')">L-Rod</div>
+        <div class="step" onclick="moveTo('teo')">Teo</div>
+        <div class="step" onclick="moveTo('master')">Master Tao</div>
+        <div class="step" onclick="moveTo('map')">Tao Map</div>
+        <div class="step" onclick="moveTo('decision')">의사결정</div>
+      </div>
+      <div class="user" id="userArea">
+        <button class="top-auth-btn" onclick="moveTo('login')">로그인</button>
+        <button class="top-auth-btn signup" onclick="moveTo('signup')">회원가입</button>
+      </div>
+    </header>
+    <section class="page" id="login">
+      <div class="simple-page">
+        <h1 class="page-title">로그인</h1>
+        <p class="page-desc">명당 서비스를 이용하려면 로그인해주세요.</p>
+
+        <div class="auth-box">
+          <input id="loginEmail" type="email" placeholder="이메일" />
+          <input id="loginPassword" type="password" placeholder="비밀번호" />
+
+          <button class="btn" onclick="loginUser()">로그인</button>
+          <p id="loginError" class="form-error"></p>
+
+          <p class="auth-link">
+            아직 계정이 없나요?
+            <span onclick="moveTo('signup')">회원가입하기</span>
+          <p id="signupError" class="form-error"></p>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="signup">
+      <div class="simple-page">
+        <h1 class="page-title">회원가입</h1>
+        <p class="page-desc">
+          생활 패턴에 맞는 명당 추천을 위해 기본 정보를 입력해주세요.
+        </p>
+
+        <div class="auth-box">
+          <input id="signupName" type="text" placeholder="이름" />
+          <input id="signupEmail" type="email" placeholder="이메일" />
+          <input id="signupPassword" type="password" placeholder="비밀번호" />
+
+          <select id="signupHousehold">
+            <option>1인 가구</option>
+            <option>신혼부부</option>
+            <option>가족 거주</option>
+          </select>
+
+          <select id="signupJob">
+            <option>직장인</option>
+            <option>대학생</option>
+            <option>프리랜서</option>
+            <option>자영업자</option>
+          </select>
+
+          <button class="btn" onclick="signupUser()">회원가입 후 시작하기</button>
+
+          <p class="auth-link">
+            이미 계정이 있나요?
+            <span onclick="moveTo('login')">로그인하기</span>
+          </p>
+        </div>
+      </div>
+    </section>
+    <section class="page" id="mypage">
+      <div class="simple-page">
+        <h1 class="page-title">마이페이지</h1>
+        <p class="page-desc">
+          회원 정보와 라이프스타일 설정, 최근 추천 결과를 확인할 수 있습니다.
+        </p>
+
+        <div class="content-grid">
+          <div class="info-card">
+            <h3>회원 정보</h3>
+
+            <p id="mypageUserInfo">
+              로그인 후 확인할 수 있습니다.
+            </p>
+
+            <button class="small-action-btn" onclick="deleteAccount()">
+              회원탈퇴
+            </button>
+          </div>
+
+          <div class="info-card">
+            <h3>라이프스타일 설정</h3>
+            <p id="mypagePreferenceInfo">
+              아직 저장된 생활 기준이 없습니다.
+            </p>
+
+            <button class="small-action-btn" onclick="editPreference()">
+              라이프스타일 수정하기
+            </button>
+          </div>
+
+          <div class="info-card">
+            <h3>최근 추천 결과</h3>
+            <p>용산 푸르지오 써밋 오피스텔 · 적합도 92점</p>
+          </div>
+        </div>
+
+        <button class="btn" onclick="moveTo('lrod')">메인으로 돌아가기</button>
+      </div>
+    </section>
+    <section class="page" id="preference">
+      <div class="simple-page">
+        <h1 class="page-title">라이프스타일 설정</h1>
+        <p class="page-desc">
+          나에게 맞는 명당 추천을 위해 생활 기준을 선택해주세요.
+        </p>
+
+        <div class="preference-box">
+          <label>원하는 지역</label>
+          <select id="prefRegion">
+            <option>강남구</option>
+            <option>강동구</option>
+            <option>강북구</option>
+            <option>강서구</option>
+            <option>관악구</option>
+            <option>광진구</option>
+            <option>구로구</option>
+            <option>금천구</option>
+            <option>노원구</option>
+            <option>도봉구</option>
+            <option>동대문구</option>
+            <option>동작구</option>
+            <option>마포구</option>
+            <option>서대문구</option>
+            <option>서초구</option>
+            <option>성동구</option>
+            <option>성북구</option>
+            <option>송파구</option>
+            <option>양천구</option>
+            <option>영등포구</option>
+            <option>용산구</option>
+            <option>은평구</option>
+            <option>종로구</option>
+            <option>중구</option>
+            <option>중랑구</option>
+          </select>
+
+          <label>거래 유형</label>
+          <select id="prefDealType" onchange="changeDealType()">
+            <option selected>매매</option>
+            <option>전세</option>
+            <option>월세</option>
+          </select>
+
+          <div id="saleBudgetBox">
+            <label>매매 예산</label>
+            <select id="prefBudget">
+              <option>2억~3억</option>
+              <option>3억~5억</option>
+              <option selected>5억~7억</option>
+              <option>7억 이상</option>
+            </select>
+          </div>
+
+          <div id="rentBudgetBox" style="display: none;">
+            <label>보증금</label>
+            <select id="prefDeposit">
+              <option>500만원 이하</option>
+              <option>500만원 ~ 1,000만원</option>
+              <option>1,000만원 ~ 3,000만원</option>
+              <option>3,000만원 ~ 5,000만원</option>
+              <option>5,000만원 ~ 1억원</option>
+              <option>1억원 ~ 2억원</option>
+              <option>2억원 이상</option>
+            </select>
+
+            <label>월세</label>
+            <select id="prefMonthlyRent">
+              <option>40만원 이하</option>
+              <option>40만원 ~ 60만원</option>
+              <option>60만원 ~ 80만원</option>
+              <option>80만원 ~ 100만원</option>
+              <option>100만원 ~ 150만원</option>
+              <option>150만원 이상</option>
+            </select>
+          </div>
+
+          <label>가장 중요한 조건</label>
+          <div class="preference-options">
+            <button type="button" class="pref-option active">직주근접</button>
+            <button type="button" class="pref-option">역세권</button>
+            <button type="button" class="pref-option">생활 인프라</button>
+            <button type="button" class="pref-option">조용한 주거지</button>
+            <button type="button" class="pref-option">한강 접근</button>
+          </div>
+
+          <label>소음 민감도</label>
+          <select id="prefNoise">
+            <option>낮음</option>
+            <option selected>보통</option>
+            <option>높음</option>
+          </select>
+
+          <label>선호 주거형태</label>
+          <select id="prefHouseType">
+            <option selected>오피스텔</option>
+            <option>아파트</option>
+            <option>빌라</option>
+            <option>도시형 생활주택</option>
+          </select>
+
+          <button class="btn" onclick="savePreference()">명당 분석 시작하기</button>
+        </div>
+      </div>
+    </section>
+    <section class="page active" id="lrod">
+      <section class="grid">
+        <aside class="card locked-card">
+          <h2>L-Rod</h2>
+          <p class="sub">서울시 라이프스타일 레이더</p>
+
+          <div class="radar locked-radar radar-paused" id="lrodRadar">
+
+            <div class="radar-stars">
+              <span class="star s1"></span>
+              <span class="star s2"></span>
+              <span class="star s3"></span>
+              <span class="star s4"></span>
+              <span class="star s5"></span>
+              <span class="star s6"></span>
+              <span class="star s7"></span>
+              <span class="star s8"></span>
+              <span class="star s9"></span>
+              <span class="star s10"></span>
+              <span class="star s11"></span>
+              <span class="star s12"></span>
+              <span class="star s13"></span>
+              <span class="star s14"></span>
+              <span class="star s15"></span>
+              <span class="star s16"></span>
+              <span class="star s17"></span>
+              <span class="star s18"></span>
+              <span class="star s19"></span>
+              <span class="star s20"></span>
+              <span class="star s21"></span>
+              <span class="star s22"></span>
+              <span class="star s23"></span>
+              <span class="star s24"></span>
+              <span class="star s25"></span>
+              <span class="star s26"></span>
+              <span class="star s27"></span>
+            </div>
+
+          </div>
+
+          <p class="sub">
+            로그인 후 생활 기준을 설정하면 AI 공간 분석이 시작됩니다.
+          </p>
+
+          <div class="tags" id="lrodTags">
+            <span class="tag">로그인 필요</span>
+            <span class="tag">레이더 정지</span>
+            <span class="tag">프로필 대기</span>
+          </div>
+
+          <div class="lrod-profile-panel" id="lrodProfilePanel">
+            <div class="lrod-profile-empty">로그인 후 프로필 파라미터가 표시됩니다.</div>
+          </div>
+
+          <button class="btn" id="lrodLoginBtn" onclick="moveTo('login')">로그인</button>
+          <button class="btn lrod-search-btn" id="lrodSearchBtn" onclick="startLrodSearch()" type="button">탐색 시작</button>
+        </aside>
+
+        <main class="card main locked-main">
+          <div class="matrix-rain" aria-hidden="true">
+            <span>0<br>1<br>0<br>1<br>A<br>I<br>0<br>1<br>D<br>A<br>T<br>A<br>1<br>0<br>S<br>C<br>A<br>N</span>
+            <span>1<br>0<br>1<br>0<br>S<br>E<br>O<br>U<br>L<br>1<br>0<br>M<br>A<br>P<br>0<br>1</span>
+            <span>0<br>1<br>1<br>0<br>P<br>R<br>I<br>C<br>E<br>0<br>1<br>A<br>R<br>E<br>A</span>
+            <span>1<br>0<br>0<br>1<br>T<br>R<br>A<br>N<br>S<br>I<br>T<br>1<br>0<br>L<br>I<br>F<br>E</span>
+            <span>0<br>1<br>0<br>1<br>N<br>O<br>I<br>S<br>E<br>1<br>0<br>Z<br>O<br>N<br>E</span>
+            <span>1<br>1<br>0<br>0<br>V<br>A<br>L<br>U<br>E<br>0<br>1<br>R<br>A<br>N<br>K</span>
+            <span>0<br>0<br>1<br>1<br>M<br>E<br>T<br>R<br>O<br>1<br>0<br>R<br>O<br>U<br>T<br>E</span>
+            <span>1<br>0<br>1<br>1<br>B<br>U<br>D<br>G<br>E<br>T<br>0<br>1<br>S<br>C<br>O<br>R<br>E</span>
+            <span>0<br>1<br>0<br>0<br>G<br>R<br>I<br>D<br>1<br>0<br>F<br>I<br>L<br>T<br>E<br>R</span>
+            <span>1<br>0<br>1<br>0<br>H<br>O<br>U<br>S<br>E<br>0<br>1<br>S<br>P<br>A<br>C<br>E</span>
+            <span>0<br>1<br>A<br>I<br>1<br>0<br>M<br>A<br>P<br>0<br>1<br>D<br>A<br>T<br>A</span>
+            <span>1<br>0<br>S<br>C<br>A<br>N<br>0<br>1<br>Z<br>O<br>N<br>E<br>1<br>0</span>
+            <span>0<br>1<br>R<br>A<br>N<br>K<br>1<br>0<br>A<br>R<br>E<br>A<br>0<br>1</span>
+            <span>1<br>0<br>V<br>A<br>L<br>U<br>E<br>0<br>1<br>A<br>I<br>1<br>0</span>
+            <span>0<br>1<br>M<br>E<br>T<br>R<br>O<br>1<br>0<br>D<br>A<br>T<br>A</span>
+            <span>1<br>0<br>L<br>I<br>F<br>E<br>0<br>1<br>S<br>C<br>A<br>N</span>
+            <span>0<br>1<br>R<br>O<br>U<br>T<br>E<br>1<br>0<br>M<br>A<br>P</span>
+            <span>1<br>0<br>P<br>R<br>I<br>C<br>E<br>0<br>1<br>A<br>I</span>
+            <span>0<br>1<br>S<br>P<br>A<br>C<br>E<br>1<br>0<br>D<br>A<br>T<br>A</span>
+            <span>1<br>0<br>H<br>O<br>M<br>E<br>0<br>1<br>S<br>C<br>O<br>R<br>E</span>
+            <span>0<br>1<br>0<br>1<br>1<br>0<br>A<br>I<br>D<br>A<br>T<br>A</span>
+            <span>1<br>0<br>1<br>0<br>0<br>1<br>M<br>A<br>P<br>S<br>C<br>A<br>N</span>
+            <span>0<br>1<br>1<br>0<br>1<br>0<br>R<br>A<br>N<br>K</span>
+            <span>1<br>0<br>0<br>1<br>0<br>1<br>G<br>R<br>I<br>D</span>
+          </div>
+
+          <h2>Teo AI Scanning</h2>
+          <p class="sub">
+            로그인 후 서울시 내 원하는 지역, 거래 조건, 생활 인프라, 소음 민감도 등을 입력하면
+            개인화된 명당 분석이 시작됩니다.
+          </p>
+
+          <div class="scan-box">
+            <strong>AI 분석 대기</strong>
+            <p class="sub">
+              • 생활 기준 입력 필요<br>
+              • 예산 조건 미설정<br>
+              • 우선순위 정보 없음
+            </p>
+          </div>
+
+          <div class="status-row">
+            <div class="status">지역 선택 대기</div>
+            <div class="status">예산 입력 대기</div>
+            <div class="status">생활 기준 대기</div>
+            <div class="status">분석 전</div>
+          </div>
+
+          <div class="property locked-property">
+            <div class="locked-placeholder">
+              🔒
+            </div>
+
+            <div>
+              <h2>개인화 추천 결과 대기</h2>
+              <p class="sub">
+                로그인 후 설문을 완료하면 사용자 조건에 맞는 후보지가 표시됩니다.
+              </p>
+              <button class="btn" onclick="moveTo('signup')">로그인 후 분석 시작</button>
+            </div>
+          </div>
+        </main>
+
+        <aside class="card chat-card locked-chat">
+          <h2>Master Tao</h2>
+          <p class="sub">AI 입지 분석 상담사</p>
+
+          <div class="chat-tabs">
+            <div class="chat-tab active">종합 분석</div>
+            <div class="chat-tab">환경 분석</div>
+            <div class="chat-tab">생활 인프라</div>
+            <div class="chat-tab">추천 사항</div>
+          </div>
+
+          <div class="chat-window" id="chatWindow">
+            <div class="chat-row bot-chat">
+              <div class="avatar">T</div>
+              <div class="bubble">
+                로그인 후 Master Tao와 개인 맞춤형 입지 상담을 시작할 수 있습니다.
+              </div>
+            </div>
+
+            <div class="check-list">
+              · 원하는 지역을 입력하면 후보지를 분석합니다.<br />
+              · 예산과 생활 패턴에 따라 적합도를 계산합니다.<br />
+              · 소음, 역세권, 생활 인프라 기준을 반영합니다.
+            </div>
+          </div>
+
+          <div class="chat-input-box locked-input">
+            <input type="text" placeholder="로그인 후 질문할 수 있어요." disabled />
+            <button class="send-btn" onclick="moveTo('login')">➤</button>
+          </div>
+        </aside>
+
+        <section class="card bottom-map locked-card" id="taoMapPreviewSection" onclick="moveTo('login')"
+          style="cursor:pointer;">
+          <h2>Tao Map</h2>
+          <p class="sub" id="taoMapPreviewDesc">로그인 후 후보 공간 비교 지도를 확인할 수 있습니다.</p>
+
+          <div class="locked-map" id="taoMapPreview">
+            🔒 아직 추천 후보가 없습니다.<br />
+            로그인 후 생활 기준을 설정하면 후보지가 표시됩니다.
+          </div>
+        </section>
+      </section>
+    </section>
+    <section class="page" id="teo">
+      <div class="teo-page">
+        <div class="teo-header">
+          <div>
+            <h1 class="page-title">Teo</h1>
+            <p class="page-desc">
+              매물정보와 실내 정보를 한 화면에서 전환해 보는 Teo 뷰포트입니다. 지역은 도시·구·동 단위로 선택합니다.
+            </p>
+          </div>
+          <button class="teo-back-btn" id="teoBackBtn" onclick="showTeoOutdoor()" type="button">지역 전체 보기</button>
+        </div>
+
+        <div class="teo-region-bar">
+          <label>도시
+            <select id="teoCity" onchange="updateTeoRegion()">
+              <option selected>서울시</option>
+            </select>
+          </label>
+          <label>구
+            <select id="teoGu" onchange="updateTeoRegion()">
+              <option selected>용산구</option>
+              <option>마포구</option>
+              <option>구로구</option>
+              <option>성동구</option>
+              <option>강남구</option>
+            </select>
+          </label>
+          <label>동
+            <select id="teoDong" onchange="updateTeoRegion()">
+              <option selected>한강로2가</option>
+              <option>한강로3가</option>
+              <option>이태원동</option>
+              <option>후암동</option>
+            </select>
+          </label>
+          <div class="teo-region-message" id="teoRegionMessage">현재 시험 단계에서는 서울시 용산구 데이터만 제공합니다.</div>
+        </div>
+
+        <div class="teo-shell">
+          <section class="teo-stage active" id="teoOutdoorStage" aria-label="Teo 실외 터 창">
+            <div class="teo-map-panel">
+              <div class="teo-map-frame">
+                <iframe class="teo-map-iframe" title="용산구 지도" src="https://map.kakao.com/?q=%EC%8B%A0%EC%9A%A9%EC%82%B0%EC%97%AD" loading="lazy"></iframe>
+                <div class="teo-property-map-card" id="teoMapPropertyCard">
+                  <div class="teo-property-map-label">1순위 매물</div>
+                  <img src="img/yongsan-prugio-summit.png" alt="용산 푸르지오 써밋" />
+                  <strong id="teoMapPropertyTitle">용산 푸르지오 써밋</strong>
+                  <p id="teoMapPropertyMeta">한강로2가 · 오피스텔 · 84㎡ · 매매 5억~7억</p>
+                  <div class="teo-property-map-grid">
+                    <span>용산역 7분</span>
+                    <span>강남 24분</span>
+                    <span>생활인프라 상</span>
+                    <span>적합도 92</span>
+                  </div>
+                </div>
+                <div class="teo-map-overlay">
+                  <div class="teo-map-tint"></div>
+                  <div class="teo-grid-map"></div>
+                  <button class="teo-pin pin-a active" onclick="openTeoIndoor('a')" type="button"><span>1</span></button>
+                  <button class="teo-pin pin-b" onclick="openTeoIndoor('b')" type="button"><span>2</span></button>
+                  <button class="teo-pin pin-c" onclick="openTeoIndoor('c')" type="button"><span>3</span></button>
+                  
+                </div>
+              </div>
+            </div>
+
+            <aside class="teo-list-panel">
+              <div class="teo-panel-title">
+                <span>매물 후보</span>
+                <small>핀 선택 시 실내 정보 전환</small>
+              </div>
+              <button class="teo-property-card active" id="teoPropertyA" onclick="openTeoIndoor('a')" type="button">
+                <strong>1. 용산 푸르지오 써밋</strong><span>한강로2가 · 오피스텔 · 84㎡ · 매매 5억~7억</span><em>🚇 강남 24분 · 🛒 생활인프라 상 · 🏙 용산역 도보권</em>
+              </button>
+              <button class="teo-property-card" id="teoPropertyB" onclick="openTeoIndoor('b')" type="button">
+                <strong>2. 시티파크 라이트룸</strong><span>한강로3가 · 투룸형 · 59㎡ · 전세 4.8억</span><em>🚇 여의도 18분 · 🌳 공원 접근 · 🛍 아이파크몰 생활권</em>
+              </button>
+              <button class="teo-property-card" id="teoPropertyC" onclick="openTeoIndoor('c')" type="button">
+                <strong>3. 후암 슬로우하우스</strong><span>후암동 · 원룸형 · 36㎡ · 월세 1000/78</span><em>🚇 서울역 14분 · ☕ 골목 상권 · 💸 예산 절감형</em>
+              </button>
+              <div class="teo-local-card" id="teoLocalInfo">
+                <strong>선택 핀 정보</strong>
+                <p id="teoLocalText">1번 핀 · 신용산역·용산역 접근성이 좋고, 대형 상업시설과 업무지구가 가까운 생활권입니다.</p>
+              </div>
+            </aside>
+          </section>
+
+          <section class="teo-stage" id="teoIndoorStage" aria-label="Teo 실내 터 창">
+            <div class="teo-video-panel">
+              <div class="teo-video-toolbar">
+                <div><span class="teo-mode-label">실내 · 환경 시뮬레이션</span><h2 id="teoIndoorTitle">용산 푸르지오 써밋</h2></div>
+                <span class="teo-score-chip" id="teoIndoorScore">적합도 92</span>
+              </div>
+              <div class="teo-video-box">
+                <video id="teoVideo" controls muted loop playsinline poster="img/yongsan-prugio-summit.png"><source id="teoVideoSource" src="video/sunlight.mp4" type="video/mp4" />이 브라우저는 video 태그를 지원하지 않습니다.</video>
+                <div class="teo-video-placeholder" id="teoVideoPlaceholder"><strong id="teoVideoLabel">일조량 영상</strong><span>video/sunlight.mp4 파일을 넣으면 이 영역에서 재생됩니다.</span></div>
+              </div>
+            </div>
+            <aside class="teo-option-panel">
+              <div class="teo-panel-title"><span>실내 옵션</span><small>영상 소스와 설명 전환</small></div>
+              <div class="teo-option-buttons">
+                <button class="teo-option active" onclick="changeTeoOption('sunlight')" type="button">일조량</button>
+                <button class="teo-option" onclick="changeTeoOption('dust')" type="button">미세먼지</button>
+                <button class="teo-option" onclick="changeTeoOption('ventilation')" type="button">환기</button>
+              </div>
+              <div class="teo-data-card"><h3 id="teoOptionTitle">일조량</h3><p id="teoOptionDesc">남향 기준 오전부터 오후까지 빛의 이동을 확인하는 실내 뷰입니다.</p><div class="teo-meter"><span id="teoMeterBar" style="width:86%"></span></div><strong id="teoOptionScore">86</strong></div>
+            </aside>
+          </section>
+        </div>
+        <button class="btn" onclick="moveTo('master')">Master Tao 분석 보기</button>
+      </div>
+    </section>
+    <section class="page" id="master">
+      <div class="simple-page">
+        <h1 class="page-title">Master Tao</h1>
+        <p class="page-desc">
+          사용자가 Teo에서 핀을 선택하면 Master Tao가 입지, 생활권, 시세 감각, 동네 체감 정보를 종합해 설명합니다.
+        </p>
+        <div class="content-grid master-analysis-grid">
+          <div class="info-card">
+            <h3>선택 매물 분석</h3>
+            <p id="masterSelectedText">아직 핀을 선택하지 않았습니다. Teo에서 매물을 선택하면 분석 결과가 갱신됩니다.</p>
+            <div class="score-num" id="masterScore">--</div>
+          </div>
+          <div class="info-card">
+            <h3>생활권 정보</h3>
+            <p id="masterLocalText">당근 동네생활처럼 체감되는 편의점, 카페, 병원, 산책로, 야간 유동량 정보를 요약합니다.</p>
+          </div>
+          <div class="info-card">
+            <h3>시세 분석 페르소나</h3>
+            <p id="masterPriceText">Master Tao는 집값 시세, 관리비 부담, 전월세/매매 전환 가능성, 주변 개발 호재를 상담하는 부동산 분석형 페르소나입니다.</p>
+          </div>
+        </div>
+        <div class="master-note" id="masterNote">
+          “리치고”처럼 숫자 기반 시세 흐름을 말하되, 동시에 동네 커뮤니티에서 나올 법한 생활 체감 정보까지 함께 설명하는 역할입니다.
+        </div>
+        <button class="btn" onclick="moveTo('map')">Tao Map에 아카이빙하기</button>
+      </div>
+    </section>
+    <section class="page" id="map">
+      <div class="simple-page">
+        <h1 class="page-title">Tao Map</h1>
+        <p class="page-desc">
+          Tao Map은 선택한 매물과 비교 후보를 저장하는 아카이빙 시스템입니다. 적합도, 생활권, 시세 감각, 실내 환경 옵션을 함께 비교합니다.
+        </p>
+        <div class="archive-toolbar">
+          <button class="archive-filter active" type="button">전체</button>
+          <button class="archive-filter" type="button">관심 매물</button>
+          <button class="archive-filter" type="button">실내 확인 완료</button>
+          <button class="archive-filter" type="button">시세 검토 필요</button>
+        </div>
+        <table class="compare-table archive-table">
+          <thead><tr><th>아카이브</th><th>지역</th><th>선택 상태</th><th>적합도</th><th>생활권 기록</th><th>시세 메모</th><th>실내 옵션</th></tr></thead>
+          <tbody id="taoArchiveBody">
+            <tr><td>용산 푸르지오 써밋</td><td>한강로2가</td><td>대표 후보</td><td>92</td><td>신용산역·용산역 생활권, 대형몰 접근</td><td>5억~7억, 관리비 확인 필요</td><td>일조량 / 미세먼지 / 환기</td></tr>
+            <tr><td>시티파크 오피스텔</td><td>한강로3가</td><td>비교 후보</td><td>88</td><td>공원 접근, 상업시설 인접</td><td>4억~6억, 세대별 노후도 확인</td><td>일조량 / 환기</td></tr>
+            <tr><td>용산시티하우스</td><td>한강로3가</td><td>예산 후보</td><td>84</td><td>원룸형 생활권, 골목 상권 접근</td><td>2.4억~2.9억, 면적 제한</td><td>미세먼지 / 환기</td></tr>
+          </tbody>
+        </table>
+        <button class="btn" onclick="moveTo('decision')">최종 의사결정하기</button>
+      </div>
+    </section>
+    <section class="page" id="decision">
+      <div class="simple-page">
+        <h1 class="page-title">최종 의사결정</h1>
+        <p class="page-desc">
+          박준혁님의 34세 직장인 1인 가구 페르소나를 기준으로 최적의 용산구 후보지를 추천합니다.
+        </p>
+        <div class="content-grid">
+          <div class="info-card">
+            <h3>최종 추천 공간</h3>
+            <p>용산 푸르지오 써밋 오피스텔</p>
+            <div class="score-num">92점</div>
+          </div>
+          <div class="info-card">
+            <h3>선택 이유</h3>
+            <p>
+              신용산역 도보권, 직주근접, 생활 인프라가 모두 우수해
+              직장인 1인 가구에게 가장 높은 생활 적합도를 보입니다.
+            </p>
+          </div>
+          <div class="info-card">
+            <h3>대안 선택지</h3>
+            <p>
+              예산 부담이 크다면 시티파크 오피스텔,
+              예산을 가장 우선한다면 용산시티하우스도 현실적인 대안입니다.
+            </p>
+          </div>
+        </div>
+        <button class="btn" onclick="moveTo('lrod')">처음으로 돌아가기</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/navigation.js"></script>
+  <script src="js/gemini.js"></script>
+  <script src="js/chat.js"></script>
+</body>
+
+</html>
