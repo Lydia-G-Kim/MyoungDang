@@ -994,7 +994,7 @@ document.addEventListener("DOMContentLoaded", function() {
     return `<div class="lrod-promo">
       <div class="recommend-label">MYOUNGDANG AI SPACE SCANNER</div>
       <h2>내 생활 패턴에 맞는 공간을 먼저 읽어보는 서비스</h2>
-      <p>명당은 사용자의 활동지역, 생활시간, 직업, 취미, 예산 조건을 기준으로 주거 후보를 탐색합니다. 탐색 시작 전에는 특정 매물을 노출하지 않고, 입력된 라이프스타일 파라미터만 정리합니다.</p>
+      <p>활동지역, 생활시간, 직업, 취미와 예산을 바탕으로 주거 후보를 탐색합니다.<br>탐색 전에는 라이프스타일 기준만 정리합니다.</p>
       <div class="promo-metrics">
         <div class="promo-metric"><strong>L-Rod</strong><span>생활 기준 스캔</span></div>
         <div class="promo-metric"><strong>Teo</strong><span>매물·실내 뷰포트</span></div>
@@ -1137,19 +1137,49 @@ document.addEventListener('DOMContentLoaded', function(){
 
 /* ===== Final requested behavior patch: no pre-login personal data, Teo right-side listings, clean map ===== */
 (function(){
-  function isLogged(){ return !!localStorage.getItem('currentUserName'); }
+  function isLogged(){
+    const userArea = document.getElementById('userArea');
+    return !!localStorage.getItem('currentUserName') && !userArea?.querySelector('.top-auth-btn');
+  }
+
+  function currentDisplayName(){
+    return localStorage.getItem('currentUserName') || getProfileValue('nickname') || '사용자';
+  }
+
+  function syncLrodTagGrid(){
+    const tags = document.getElementById('lrodTags');
+    if(!tags) return;
+    const count = tags.querySelectorAll('.tag').length;
+    tags.dataset.count = String(Math.min(Math.max(count, 1), 4));
+  }
+
+  function syncLrodIntro(){
+    const intro = document.querySelector('#lrod .grid > .locked-card:first-child > .sub:nth-of-type(2)');
+    if(intro && isLogged()) intro.textContent = `${currentDisplayName()}님의 공간 분석입니다.`;
+    syncLrodTagGrid();
+  }
+
   function requireSignupLrod(){
     const panel = document.getElementById('lrodProfilePanel');
     const tags = document.getElementById('lrodTags');
     const radar = document.getElementById('lrodRadar');
     const section = document.getElementById('lrod');
+    const intro = document.querySelector('#lrod .grid > .locked-card:first-child > .sub:nth-of-type(2)');
     if(radar){ radar.classList.add('radar-paused'); radar.classList.remove('radar-scanning'); }
     if(section){ section.classList.remove('lrod-ready','lrod-scanning'); }
+    if(intro) intro.textContent = '로그인 후 생활 기준을 설정하면 AI 공간 분석이 시작됩니다.';
     if(panel){
-      panel.innerHTML = `<div class="lrod-profile-empty lrod-join-required"><strong>회원가입 후 진행해주세요.</strong><span>로그인 전에는 퍼스널 데이터와 추천 매물 정보를 표시하지 않습니다. 가입 후 프로필 파라미터를 입력하면 L-Rod 탐색을 시작할 수 있습니다.</span></div>`;
+      panel.innerHTML = `<div class="lrod-profile-empty">로그인 후 프로필 파라미터가 표시됩니다.</div>`;
     }
-    if(tags){ tags.innerHTML = `<span class="tag">회원가입 필요</span><span class="tag">퍼스널 데이터 없음</span><span class="tag">레이더 정지</span>`; }
+    if(tags){ tags.innerHTML = `<span class="tag">로그인 필요</span><span class="tag">레이더 정지</span><span class="tag">프로필 대기</span>`; }
+    syncLrodTagGrid();
   }
+
+  const previousActivatePersonalizedResult = window.activatePersonalizedResult;
+  window.activatePersonalizedResult = function(){
+    if(typeof previousActivatePersonalizedResult === 'function') previousActivatePersonalizedResult();
+    syncLrodIntro();
+  };
 
   const previousRenderLrodState = window.renderLrodState;
   window.renderLrodState = function(){
@@ -1159,6 +1189,7 @@ document.addEventListener('DOMContentLoaded', function(){
       return;
     }
     if(typeof previousRenderLrodState === 'function') previousRenderLrodState();
+    syncLrodIntro();
   };
 
   const previousStartLrodSearch = window.startLrodSearch;
@@ -1169,6 +1200,13 @@ document.addEventListener('DOMContentLoaded', function(){
       return;
     }
     if(typeof previousStartLrodSearch === 'function') previousStartLrodSearch();
+    syncLrodIntro();
+  };
+
+  const previousSaveLrodProfile = window.saveLrodProfile;
+  window.saveLrodProfile = function(){
+    if(typeof previousSaveLrodProfile === 'function') previousSaveLrodProfile();
+    syncLrodIntro();
   };
 
   function syncTeoListings(){
@@ -1208,6 +1246,7 @@ document.addEventListener('DOMContentLoaded', function(){
       sessionStorage.setItem('md0614Initialized','true');
     }
     if(!isLogged()) requireSignupLrod();
+    syncLrodIntro();
     syncTeoListings();
   });
 })();

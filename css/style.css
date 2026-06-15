@@ -3119,6 +3119,46 @@ header{background:rgba(8,24,40,.72);border:1px solid var(--md-line);border-radiu
 #teo .teo-pin::after{z-index:10 !important;}
 #teo .teo-region-message{color:#9ed8e9 !important;}
 #teo .teo-region-message.warning{color:#ffdc82 !important;}
+
+/* Teo readability: region status notice */
+#teo .teo-region-bar label {
+  color: #b7cad9 !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.01em;
+}
+
+#teo .teo-region-message {
+  min-height: 44px !important;
+  gap: 9px;
+  padding: 21px 4px 5px !important;
+  background: transparent !important;
+  color: #a9bfd0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
+#teo .teo-region-message::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #6ed7c3;
+  box-shadow: 0 0 10px rgba(110, 215, 195, 0.42);
+}
+
+#teo .teo-region-message.warning {
+  color: #ffe0a0 !important;
+}
+
+#teo .teo-region-message.warning::before {
+  background: #ffce72;
+  box-shadow: 0 0 10px rgba(255, 206, 114, 0.4);
+}
 #lrod .lrod-profile-empty{
   padding:16px;
   border-radius:16px;
@@ -3133,8 +3173,439 @@ header{background:rgba(8,24,40,.72);border:1px solid var(--md-line);border-radiu
 }
 #lrod .lrod-join-required strong{font-size:16px;color:#ffffff;}
 #lrod .lrod-join-required span{font-size:13px;color:#9fb7c9;line-height:1.55;}
+
+/* 로그인 전 가입 안내가 고정 높이 안에서 잘리지 않도록 조정 */
+#lrod:not(.lrod-ready) .lrod-profile-panel {
+  flex: 0 0 auto;
+  overflow: visible;
+  padding: 8px;
+}
+
+#lrod:not(.lrod-ready) .lrod-join-required {
+  gap: 7px;
+  padding: 12px;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+#lrod:not(.lrod-ready) .lrod-join-required strong {
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+#lrod:not(.lrod-ready) .lrod-join-required span {
+  font-size: 11.5px;
+  line-height: 1.45;
+}
 @media(max-width:1100px){
   #teo .teo-stage#teoOutdoorStage.active{grid-template-columns:1fr !important;}
   #teo .teo-list-panel{min-height:auto !important;}
   #teo .teo-property-map-card{position:absolute !important;}
+}
+
+/* ===== L-Rod text wrapping and promo layout fix ===== */
+#lrod .property.locked-property:has(.lrod-promo) {
+  display: block;
+  min-height: 0;
+}
+
+#lrod .property.locked-property > .lrod-promo {
+  width: 100%;
+  min-width: 0;
+  min-height: 170px;
+  padding: 16px 20px;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.64fr);
+  grid-template-rows: auto auto auto;
+  column-gap: 24px;
+  row-gap: 8px;
+  align-content: center;
+}
+
+#lrod .lrod-promo > .recommend-label,
+#lrod .lrod-promo > h2,
+#lrod .lrod-promo > p {
+  grid-column: 1;
+}
+
+#lrod .lrod-promo > .promo-metrics {
+  grid-column: 2;
+  grid-row: 1 / 4;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-self: stretch;
+}
+
+#lrod .lrod-promo .promo-metric {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+#lrod .lrod-promo h2,
+#lrod .lrod-promo p,
+#lrod .status,
+#lrod .chat-tab,
+#lrod .bubble,
+#lrod .check-list {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+#lrod .lrod-promo h2 {
+  font-size: clamp(22px, 1.6vw, 27px);
+  line-height: 1.25;
+}
+
+#lrod .lrod-promo > p {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+#lrod .chat-tabs {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+#lrod .chat-tab {
+  min-width: 0;
+  padding: 14px 2px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+#lrod .status {
+  min-width: 0;
+  line-height: 1.35;
+}
+
+@media (max-width: 1380px) and (min-width: 1181px) {
+  #lrod .grid {
+    grid-template-columns: 225px minmax(0, 1fr) 300px;
+  }
+
+  #lrod .main {
+    padding: 22px;
+  }
+
+  #lrod .property.locked-property > .lrod-promo {
+    padding: 20px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  #lrod .lrod-promo > .recommend-label,
+  #lrod .lrod-promo > h2,
+  #lrod .lrod-promo > p,
+  #lrod .lrod-promo > .promo-metrics {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  #lrod .lrod-promo > .promo-metrics {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ===== Reference palette: mint / violet navigation and actions ===== */
+:root {
+  --md-action-mint: #58d8c2;
+  --md-action-violet: #7652e8;
+  --md-action-purple: #452b86;
+  --md-action-pink: #eb5f9c;
+  --md-button-dark: #20293b;
+  --md-button-line: rgba(255, 255, 255, 0.12);
+}
+
+.step {
+  background: var(--md-button-dark) !important;
+  border-color: var(--md-button-line) !important;
+  color: #c7cbd6 !important;
+}
+
+.step.active,
+.top-auth-btn.signup,
+#lrod #lrodLoginBtn,
+#lrod .lrod-search-btn,
+.auth-box .btn,
+.preference-box .btn {
+  background: linear-gradient(135deg, var(--md-action-mint), var(--md-action-violet)) !important;
+  color: #ffffff !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.top-auth-btn:not(.signup) {
+  background: var(--md-button-dark) !important;
+  color: #ffffff !important;
+  border-color: var(--md-button-line) !important;
+}
+
+#lrod .chat-tab.active {
+  background: var(--md-action-purple) !important;
+  border-color: rgba(138, 103, 232, 0.45) !important;
+  color: #ffffff !important;
+}
+
+#lrod .send-btn,
+.send-btn {
+  background: linear-gradient(135deg, #843ee3, var(--md-action-pink)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 20px rgba(225, 74, 157, 0.24) !important;
+}
+
+.step:hover,
+.top-auth-btn:hover,
+.btn:hover,
+.send-btn:hover {
+  filter: brightness(1.08);
+  opacity: 1;
+}
+
+/* Master Tao 잠금 입력창: 바깥 캡슐만 보이도록 내부 사각형 제거 */
+#lrod .chat-input-box.locked-input input,
+#lrod .chat-input-box.locked-input input:disabled {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  opacity: 1;
+  -webkit-text-fill-color: #9ca3af;
+}
+
+#lrod #lrodLoginBtn {
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+/* L-Rod 정보 위계와 Master Tao 대기 화면 보정 */
+#lrod:not(.lrod-ready) .lrod-join-required span {
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+#lrod .lrod-promo > p {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #c7d6e3;
+}
+
+#lrod .analysis-standby {
+  margin: 28px 0 0 48px;
+  padding: 14px 15px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(88, 216, 194, 0.055), rgba(118, 82, 232, 0.07));
+  border: 1px solid rgba(139, 123, 255, 0.13);
+}
+
+#lrod .analysis-standby-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  color: #a9b8c8;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+#lrod .analysis-standby-head small {
+  color: #756d91;
+  font-size: 9px;
+  letter-spacing: 0;
+}
+
+#lrod .analysis-signal {
+  height: 5px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+#lrod .analysis-signal span {
+  display: block;
+  width: 38%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(88, 216, 194, 0.55), rgba(118, 82, 232, 0.6));
+}
+
+#lrod .analysis-signal:nth-child(3) span {
+  width: 62%;
+  opacity: 0.65;
+}
+
+#lrod .analysis-signal:nth-child(4) span {
+  width: 48%;
+  opacity: 0.4;
+}
+
+/* 가독성을 높인 콘텐츠가 잘리지 않도록 상단 3개 패널 높이 통일 */
+#lrod .grid {
+  grid-template-rows: 670px auto;
+}
+
+#lrod .grid > .locked-card:first-child,
+#lrod .main,
+#lrod .chat-card {
+  height: 670px;
+  max-height: 670px;
+}
+
+/* ===== Previous-work deep navy surface palette ===== */
+body {
+  background: #080f1f !important;
+}
+
+.app {
+  background: #0c1425 !important;
+  border-color: rgba(132, 139, 170, 0.16) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34) !important;
+}
+
+header {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.card,
+.info-card,
+.auth-box,
+.preference-box,
+.simple-page,
+.teo-page {
+  background: linear-gradient(145deg, #0d1729, #0a1323) !important;
+  border-color: rgba(132, 139, 170, 0.17) !important;
+  box-shadow: none !important;
+}
+
+#signup .auth-box {
+  border: none !important;
+}
+
+#preference .preference-box {
+  border: none !important;
+}
+
+#lrod .grid > .locked-card:first-child {
+  background: linear-gradient(180deg, #080f1d, #0b1425) !important;
+  border-color: rgba(132, 139, 170, 0.16) !important;
+  box-shadow: none !important;
+}
+
+#lrod .main,
+#lrod .chat-card,
+#lrod #taoMapPreviewSection {
+  border-color: rgba(132, 139, 170, 0.18) !important;
+}
+
+#lrod .main::before {
+  background:
+    linear-gradient(rgba(4, 10, 21, 0.54), rgba(5, 11, 23, 0.88)),
+    url('../img/images_seoul-map-25gu.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+#lrod .lrod-promo {
+  background: linear-gradient(135deg, rgba(13, 23, 42, 0.94), rgba(15, 25, 45, 0.96)) !important;
+  border-color: rgba(105, 132, 174, 0.24) !important;
+  box-shadow: none !important;
+}
+
+#lrod .promo-metric {
+  background: #172238 !important;
+  border-color: rgba(132, 139, 170, 0.22) !important;
+}
+
+#lrod .lrod-profile-empty,
+#lrod .analysis-standby {
+  background: #202a3b !important;
+  border-color: rgba(145, 151, 177, 0.22) !important;
+}
+
+#lrod .status,
+#lrod .chat-input-box {
+  background: rgba(18, 26, 45, 0.88) !important;
+  border-color: rgba(132, 139, 170, 0.22) !important;
+}
+
+/* ===== L-Rod profile panel requested layout refinements ===== */
+#lrod.lrod-ready .grid > .locked-card:first-child {
+  height: 800px !important;
+  max-height: 800px !important;
+  overflow: hidden !important;
+}
+
+#lrod.lrod-ready .main,
+#lrod.lrod-ready .chat-card {
+  height: 800px !important;
+  max-height: 800px !important;
+}
+
+#lrod.lrod-ready .grid {
+  grid-template-rows: 800px auto !important;
+}
+
+#lrod.lrod-ready .grid > .locked-card:first-child > .sub:nth-of-type(2) {
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  margin-bottom: 14px !important;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+#lrod.lrod-ready #lrodTags {
+  grid-template-columns: 1fr !important;
+  gap: 8px !important;
+  margin-bottom: 12px !important;
+}
+
+#lrod.lrod-ready #lrodTags[data-count="2"],
+#lrod.lrod-ready #lrodTags[data-count="3"],
+#lrod.lrod-ready #lrodTags[data-count="4"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+#lrod.lrod-ready #lrodTags .tag {
+  min-width: 0;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: normal;
+}
+
+#lrod.lrod-ready .lrod-profile-panel {
+  flex: 0 0 auto !important;
+  overflow: visible !important;
+  padding: 12px !important;
+}
+
+#lrod.lrod-ready .lrod-profile-summary {
+  line-height: 1.55 !important;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+#lrod.lrod-ready .lrod-profile-grid {
+  gap: 8px !important;
+}
+
+#lrod.lrod-ready .lrod-profile-row {
+  align-items: center;
+}
+
+#lrod.lrod-ready .lrod-profile-row input,
+#lrod.lrod-ready .lrod-profile-row select {
+  min-height: 32px;
+}
+
+#lrod.lrod-ready .lrod-search-btn {
+  margin-top: 16px !important;
 }
