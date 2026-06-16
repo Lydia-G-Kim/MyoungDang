@@ -1,4 +1,13 @@
 function moveTo(pageId) {
+  const publicPages = ["login", "signup", "lrod"];
+  const userArea = document.getElementById("userArea");
+  const isLoggedIn = !!localStorage.getItem("currentUserName") && !userArea?.querySelector(".top-auth-btn");
+  const requestedPageId = pageId;
+
+  if (!isLoggedIn && !publicPages.includes(pageId)) {
+    pageId = "login";
+  }
+
   const pages = document.querySelectorAll(".page");
   const steps = document.querySelectorAll(".step");
 
@@ -10,6 +19,8 @@ function moveTo(pageId) {
   if (targetPage) {
     targetPage.classList.add("active");
   }
+
+  updateLoginRequiredNotice(!isLoggedIn && requestedPageId !== pageId ? requestedPageId : null);
 
   const stepMap = {
     lrod: 0,
@@ -27,6 +38,37 @@ function moveTo(pageId) {
     top: 0,
     behavior: "smooth"
   });
+}
+
+function updateLoginRequiredNotice(pageId) {
+  const loginPage = document.getElementById("login");
+  const authBox = loginPage?.querySelector(".auth-box");
+  const existingNotice = document.getElementById("loginRequiredNotice");
+
+  if (existingNotice) {
+    existingNotice.remove();
+  }
+
+  if (!pageId || !authBox) return;
+
+  const pageNames = {
+    teo: "Teo",
+    master: "Master Tao",
+    map: "Tao Map",
+    decision: "의사결정",
+    mypage: "마이페이지",
+    preference: "라이프스타일 설정"
+  };
+
+  const notice = document.createElement("div");
+  notice.id = "loginRequiredNotice";
+  notice.className = "login-required-notice";
+  notice.innerHTML = `
+    <strong>${pageNames[pageId] || "해당 메뉴"}는 로그인 후 이용할 수 있습니다.</strong>
+    <span>로그인하면 생활 기준과 분석 결과를 바탕으로 개인화된 정보를 확인할 수 있어요.</span>
+  `;
+
+  authBox.prepend(notice);
 }
 
 function goHome() {
@@ -289,6 +331,7 @@ function activatePersonalizedResult() {
   const masterBubble = document.querySelector("#lrod .chat-window .bubble");
   const checkList = document.querySelector("#lrod .check-list");
   const chatInputBox = document.querySelector("#lrod .chat-input-box");
+  const analysisStandby = document.querySelector("#lrod .analysis-standby");
   const lockedMap = document.querySelector("#lrod .locked-map");
   const taoMapPreviewSection = document.getElementById("taoMapPreviewSection");
   const taoMapPreviewDesc = document.getElementById("taoMapPreviewDesc");
@@ -412,6 +455,10 @@ function activatePersonalizedResult() {
     `;
   }
 
+  if (analysisStandby) {
+    analysisStandby.style.display = "none";
+  }
+
   const chatWindow = document.getElementById("chatWindow");
 
   if (chatWindow && !document.getElementById("quickQuestionBox")) {
@@ -460,14 +507,15 @@ function activatePersonalizedResult() {
         <h4>${place.name}</h4>
 
         <div class="tao-preview-meta">
-          ${place.price} · ${place.roomType}
+          ${place.area}<br />
+          ${place.propertyType || "오피스텔"} · ${place.size || "84㎡"}<br />
+          ${place.dealType} ${place.price}
         </div>
+      </div>
 
-        <div class="tao-preview-score">
-          적합도 ${place.score}
-        </div>
-
-        <span class="tao-preview-tag">${place.tag}</span>
+      <div class="tao-preview-score" style="--score:${place.score};">
+        <strong>${place.score}</strong>
+        <span>점<br />적합도</span>
       </div>
 
       <div class="tao-preview-arrow">›</div>
@@ -566,7 +614,6 @@ function getTaoMapPreviewPlaces(dealType) {
         roomType: "원룸형",
         price: "보증금 1,000~3,000 / 월세 60~80",
         score: 89,
-        tag: "월세형",
         image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80"
       },
       {
@@ -576,7 +623,6 @@ function getTaoMapPreviewPlaces(dealType) {
         roomType: "투룸형",
         price: "보증금 5,000~1억 / 월세 80~100",
         score: 86,
-        tag: "직주근접",
         image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80"
       },
       {
@@ -586,7 +632,6 @@ function getTaoMapPreviewPlaces(dealType) {
         roomType: "원룸형",
         price: "보증금 500~1,000 / 월세 40~60",
         score: 82,
-        tag: "가성비",
         image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80"
       }
     ];
@@ -601,7 +646,6 @@ function getTaoMapPreviewPlaces(dealType) {
         roomType: "투룸형",
         price: "전세 3억~5억",
         score: 90,
-        tag: "중간형",
         image: "https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?auto=format&fit=crop&w=800&q=80"
       },
       {
@@ -611,7 +655,6 @@ function getTaoMapPreviewPlaces(dealType) {
         roomType: "원룸형",
         price: "전세 2억~3억",
         score: 86,
-        tag: "1인 가구",
         image: "https://images.unsplash.com/photo-1523755231516-e43fd2e8dca5?auto=format&fit=crop&w=800&q=80"
       },
       {
@@ -621,7 +664,6 @@ function getTaoMapPreviewPlaces(dealType) {
         roomType: "투룸형",
         price: "전세 3억~5억",
         score: 84,
-        tag: "조용한 주거지",
         image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80"
       }
     ];
@@ -632,30 +674,33 @@ function getTaoMapPreviewPlaces(dealType) {
       name: "용산 푸르지오 써밋 오피스텔",
       area: "한강로2가",
       dealType: "매매",
+      propertyType: "오피스텔",
+      size: "84㎡",
       roomType: "투룸형",
       price: "5억~7억",
       score: 92,
-      tag: "고급형",
       image: "img/yongsan-prugio-summit.png"
     },
     {
       name: "시티파크 오피스텔",
       area: "한강로3가",
       dealType: "매매",
+      propertyType: "오피스텔",
+      size: "59㎡",
       roomType: "원룸~투룸형",
       price: "4억~6억",
       score: 88,
-      tag: "중간형",
       image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=900&q=80"
     },
     {
       name: "용산시티하우스",
       area: "한강로3가",
       dealType: "매매",
+      propertyType: "아파트",
+      size: "75㎡",
       roomType: "원룸형",
       price: "2.4억~2.9억",
       score: 84,
-      tag: "가성비형",
       image: "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=900&q=80"
     }
   ];
@@ -674,7 +719,7 @@ const teoProperties = {
   c: {
     title: "후암 슬로우하우스",
     score: 84,
-    text: "3번 핀 · 서울역 14분, 후암동 골목 상권과 카페 접근. 예산 부담은 낮지만 언덕·골목 동선 확인이 필요한 월세형 가상 매물입니다."
+    text: "3번 핀 · 서울역 14분, 후암동 골목 상권과 카페 접근. 예산 부담은 낮지만 언덕·골목 동선 확인이 필요한 월세 가상 매물입니다."
   }
 };
 
@@ -825,12 +870,12 @@ const masterPropertyDetails = {
     name: "용산 푸르지오 써밋",
     score: 92,
     local: "신용산역과 용산역을 동시에 쓰는 생활권입니다. 대형몰, 영화관, 병원, 카페 접근성이 좋아 퇴근 후 생활 동선이 짧습니다. 야간에도 유동 인구가 있어 편의성은 높지만 조용한 주거감을 원하면 층수와 창 방향 확인이 필요합니다.",
-    price: "5억~7억 구간의 고급형 후보입니다. 교통·상업 인프라 프리미엄이 반영된 가격대로 보고, 관리비와 실거래 변동 폭을 함께 확인하는 방식의 시세 분석이 필요합니다."
+    price: "5억~7억 구간의 후보입니다. 교통·상업 인프라 프리미엄이 반영된 가격대로 보고, 관리비와 실거래 변동 폭을 함께 확인하는 방식의 시세 분석이 필요합니다."
   },
   b: {
     name: "시티파크 오피스텔",
     score: 88,
-    local: "용산공원과 상업시설 접근성이 함께 있는 중간형 후보입니다. 생활 편의와 산책 동선이 균형적이며, 커뮤니티 체감으로는 주말 외출 동선이 짧은 편입니다.",
+    local: "용산공원과 상업시설 접근성이 함께 있는 후보입니다. 생활 편의와 산책 동선이 균형적이며, 커뮤니티 체감으로는 주말 외출 동선이 짧은 편입니다.",
     price: "4억~6억 구간으로 대표 후보보다 부담이 낮습니다. 일부 세대의 연식과 수리 상태가 가격 차이를 만들 수 있어 실내 컨디션 확인이 핵심입니다."
   },
   c: {
@@ -864,6 +909,9 @@ function renderLrodState() {
   }
 
   section.classList.add("lrod-ready");
+  radar.classList.remove("radar-paused");
+  radar.classList.add("radar-scanning");
+
   const name = localStorage.getItem("currentUserName") || getProfileValue("nickname");
   panel.innerHTML = `
     <div class="lrod-profile-summary">
@@ -1004,18 +1052,57 @@ document.addEventListener("DOMContentLoaded", function() {
     </div>`;
   }
   function setPromoState(){
+    const mainCard = document.querySelector('#lrod .main');
     const title = document.querySelector('#lrod .main h2');
     const desc = document.querySelector('#lrod .main > .sub');
     const scanBox = document.querySelector('#lrod .scan-box');
     const propertyBox = document.querySelector('#lrod .property, #lrod .top-recommend-card');
     const statuses = document.querySelectorAll('#lrod .status');
-    if(title) title.textContent = '명당 서비스';
-    if(desc) desc.innerHTML = 'L-Rod가 사용자 생활 조건을 읽기 전에는 추천 매물을 표시하지 않습니다.';
-    if(scanBox) scanBox.style.display = '';
-    statuses.forEach((el,i)=>{el.textContent = ['프로필 대기','지역 기준 대기','생활 파라미터 대기','탐색 전'][i] || '탐색 전';});
-    if(propertyBox){ propertyBox.className='property locked-property'; propertyBox.innerHTML = promoHTML(); }
+    const taoMapPreviewSection = document.getElementById('taoMapPreviewSection');
+    const taoMapPreviewDesc = document.getElementById('taoMapPreviewDesc');
+    const taoMapPreview = document.getElementById('taoMapPreview');
     const bubble = document.querySelector('#lrod .chat-window .bubble');
-    if(bubble) bubble.textContent = '탐색 시작 후 선택 후보의 입지, 생활권, 시세 감각을 순차적으로 분석합니다.';
+    const checkList = document.querySelector('#lrod .check-list');
+    const quickBox = document.getElementById('quickQuestionBox');
+    const chatInputBox = document.querySelector('#lrod .chat-input-box');
+    const analysisStandby = document.querySelector('#lrod .analysis-standby');
+
+    if(mainCard) mainCard.classList.remove('analyzed');
+    if(title) title.textContent = 'Teo AI Scanning';
+    if(desc) desc.innerHTML = '로그인 후 서울시 내 원하는 지역, 거래 조건, 생활 인프라, 소음 민감도 등을 입력하면 개인화된 명당 분석이 시작됩니다.';
+    if(scanBox) scanBox.style.display = '';
+    statuses.forEach((el,i)=>{el.textContent = ['지역 선택 대기','예산 입력 대기','생활 기준 대기','분석 전'][i] || '분석 전';});
+    if(propertyBox){
+      propertyBox.className='property locked-property';
+      propertyBox.innerHTML = promoHTML();
+    }
+    if(bubble) bubble.textContent = '로그인 후 Master Tao와 개인 맞춤형 입지 상담을 시작할 수 있습니다.';
+    if(analysisStandby) analysisStandby.style.display = '';
+    if(checkList) {
+      checkList.innerHTML = `
+        · 원하는 지역을 입력하면 후보지를 분석합니다.<br />
+        · 예산과 생활 패턴에 따라 적합도를 계산합니다.<br />
+        · 소음, 역세권, 생활 인프라 기준을 반영합니다.
+      `;
+    }
+    if(quickBox) quickBox.remove();
+    if(chatInputBox) {
+      chatInputBox.className = 'chat-input-box locked-input';
+      chatInputBox.innerHTML = `
+        <input type="text" placeholder="로그인 후 질문할 수 있어요." disabled />
+        <button class="send-btn" onclick="moveTo('login')">➤</button>
+      `;
+    }
+    if(taoMapPreviewSection) {
+      taoMapPreviewSection.classList.add('locked-card');
+      taoMapPreviewSection.setAttribute('onclick', "moveTo('login')");
+      taoMapPreviewSection.style.cursor = 'pointer';
+    }
+    if(taoMapPreviewDesc) taoMapPreviewDesc.textContent = '로그인 후 후보 공간 비교 지도를 확인할 수 있습니다.';
+    if(taoMapPreview) {
+      taoMapPreview.className = 'locked-map';
+      taoMapPreview.innerHTML = `🔒 아직 추천 후보가 없습니다.<br />로그인 후 생활 기준을 설정하면 후보지가 표시됩니다.`;
+    }
   }
   function polishResult(){
     const img = document.querySelector('#lrod .top-recommend-img');
@@ -1026,7 +1113,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if(desc) desc.innerHTML = `${getProfileValue('nickname')}님의 생활 기준을 기준으로 1순위 후보를 도출했습니다.<br>${PROPERTY.area} · ${PROPERTY.type} · ${PROPERTY.size} · ${PROPERTY.price}`;
   }
   window.activatePersonalizedResult = function(){
-    if(localStorage.getItem('lrodSearchStarted') !== 'true') { setPromoState(); return; }
+    const hasAnalysis = localStorage.getItem('hasPreference') === 'true' || localStorage.getItem('lrodSearchStarted') === 'true';
+    if(!hasAnalysis) { setPromoState(); return; }
+    localStorage.setItem('lrodSearchStarted','true');
     if(typeof baseActivate === 'function') baseActivate();
     polishResult();
   };
@@ -1034,7 +1123,12 @@ document.addEventListener("DOMContentLoaded", function() {
   const baseRender = window.renderLrodState;
   window.renderLrodState = function(){
     if(typeof baseRender === 'function') baseRender();
-    if(localStorage.getItem('lrodSearchStarted') !== 'true') setPromoState();
+    const hasAnalysis = localStorage.getItem('hasPreference') === 'true' || localStorage.getItem('lrodSearchStarted') === 'true';
+    if(hasAnalysis) {
+      window.activatePersonalizedResult();
+    } else {
+      setPromoState();
+    }
   };
 
   window.startLrodSearch = function(){
@@ -1121,9 +1215,14 @@ document.addEventListener("DOMContentLoaded", function() {
   };
 
   document.addEventListener('DOMContentLoaded', function(){
-    localStorage.removeItem('lrodSearchStarted');
     setupTeoMap(); setupMasterTabs();
-    setPromoState();
+    if(localStorage.getItem('currentUserName') && localStorage.getItem('hasPreference') === 'true') {
+      localStorage.setItem('lrodSearchStarted','true');
+      window.activatePersonalizedResult();
+    } else {
+      localStorage.removeItem('lrodSearchStarted');
+      setPromoState();
+    }
   });
 })();
 
@@ -1169,14 +1268,60 @@ document.addEventListener('DOMContentLoaded', function(){
     if(section){ section.classList.remove('lrod-ready','lrod-scanning'); }
     if(intro) intro.textContent = '로그인 후 생활 기준을 설정하면 AI 공간 분석이 시작됩니다.';
     if(panel){
-      panel.innerHTML = `<div class="lrod-profile-empty">로그인 후 프로필 파라미터가 표시됩니다.</div>`;
+      panel.innerHTML = `<div class="lrod-profile-empty lrod-join-required"><strong>로그인 후 진행해주세요.</strong><span>로그인 전에는 퍼스널 데이터와 추천 매물 정보를 표시하지 않습니다. 로그인 후 프로필 파라미터를 입력하면 L-Rod 탐색을 시작할 수 있습니다.</span></div>`;
     }
     if(tags){ tags.innerHTML = `<span class="tag">로그인 필요</span><span class="tag">레이더 정지</span><span class="tag">프로필 대기</span>`; }
     syncLrodTagGrid();
   }
 
+  function resetPreLoginLrodContent(){
+    const mainCard = document.querySelector('#lrod .main');
+    const title = document.querySelector('#lrod .main h2');
+    const desc = document.querySelector('#lrod .main > .sub');
+    const scanBox = document.querySelector('#lrod .scan-box');
+    const propertyBox = document.querySelector('#lrod .property, #lrod .top-recommend-card');
+    const statuses = document.querySelectorAll('#lrod .status');
+    const taoMapPreviewSection = document.getElementById('taoMapPreviewSection');
+    const taoMapPreviewDesc = document.getElementById('taoMapPreviewDesc');
+    const taoMapPreview = document.getElementById('taoMapPreview');
+    const quickBox = document.getElementById('quickQuestionBox');
+    const chatInputBox = document.querySelector('#lrod .chat-input-box');
+    const analysisStandby = document.querySelector('#lrod .analysis-standby');
+
+    if(mainCard) mainCard.classList.remove('analyzed');
+    if(title) title.textContent = 'Teo AI Scanning';
+    if(desc) desc.innerHTML = '로그인 후 서울시 내 원하는 지역, 거래 조건, 생활 인프라, 소음 민감도 등을 입력하면 개인화된 명당 분석이 시작됩니다.';
+    if(scanBox) scanBox.style.display = '';
+    statuses.forEach((el,i)=>{el.textContent = ['지역 선택 대기','예산 입력 대기','생활 기준 대기','분석 전'][i] || '분석 전';});
+    if(propertyBox){
+      propertyBox.className = 'property locked-property';
+      propertyBox.innerHTML = promoHTML();
+    }
+    if(analysisStandby) analysisStandby.style.display = '';
+    if(quickBox) quickBox.remove();
+    if(chatInputBox) {
+      chatInputBox.className = 'chat-input-box locked-input';
+      chatInputBox.innerHTML = `<input type="text" placeholder="로그인 후 질문할 수 있어요." disabled /><button class="send-btn" onclick="moveTo('login')">➤</button>`;
+    }
+    if(taoMapPreviewSection) {
+      taoMapPreviewSection.classList.add('locked-card');
+      taoMapPreviewSection.setAttribute('onclick', "moveTo('login')");
+      taoMapPreviewSection.style.cursor = 'pointer';
+    }
+    if(taoMapPreviewDesc) taoMapPreviewDesc.textContent = '로그인 후 후보 공간 비교 지도를 확인할 수 있습니다.';
+    if(taoMapPreview) {
+      taoMapPreview.className = 'locked-map';
+      taoMapPreview.innerHTML = `🔒 아직 추천 후보가 없습니다.<br />로그인 후 생활 기준을 설정하면 후보지가 표시됩니다.`;
+    }
+  }
+
   const previousActivatePersonalizedResult = window.activatePersonalizedResult;
   window.activatePersonalizedResult = function(){
+    if(!isLogged()){
+      requireSignupLrod();
+      resetPreLoginLrodContent();
+      return;
+    }
     if(typeof previousActivatePersonalizedResult === 'function') previousActivatePersonalizedResult();
     syncLrodIntro();
   };
@@ -1185,6 +1330,7 @@ document.addEventListener('DOMContentLoaded', function(){
   window.renderLrodState = function(){
     if(!isLogged()){
       requireSignupLrod();
+      resetPreLoginLrodContent();
       if(typeof window.activatePersonalizedResult === 'function') window.activatePersonalizedResult();
       return;
     }
