@@ -514,8 +514,8 @@ function activatePersonalizedResult() {
       </div>
 
       <div class="tao-preview-score" style="--score:${place.score};">
-        <strong>${place.score}</strong>
-        <span>점<br />적합도</span>
+        <strong>${place.score}<span>점</span></strong>
+        <small>적합도</small>
       </div>
 
       <div class="tao-preview-arrow">›</div>
