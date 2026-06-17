@@ -4680,3 +4680,18 @@ body {
 #lrod #taoMapPreview.tao-preview-wide .tao-preview-score > span {
   display: none !important;
 }
+
+/* ===== Final top card vertical balance ===== */
+#lrod .main.analyzed .top-recommend-info {
+  transform: translateY(26px) !important;
+}
+
+#lrod .main.analyzed .top-recommend-card .mini-score-row,
+#lrod .main.analyzed .mini-score-row {
+  transform: translateY(36px) !important;
+}
+
+#lrod .main.analyzed .top-recommend-card .outline-data-btn,
+#lrod .main.analyzed .outline-data-btn {
+  transform: translateY(-2px) !important;
+}
