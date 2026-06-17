@@ -4695,3 +4695,62 @@ body {
 #lrod .main.analyzed .outline-data-btn {
   transform: translateY(-2px) !important;
 }
+
+
+/* Teo page bottom action readability */
+#teo .master-analysis-btn {
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.32);
+}
+
+
+/* Master Tao readability refinements */
+#master .master-note {
+  background: rgba(18, 48, 76, 0.95) !important;
+  border: 1px solid rgba(97, 231, 255, 0.24) !important;
+  color: #ffffff !important;
+}
+
+#master .simple-page > .btn {
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.32);
+}
+
+
+/* Tao Map archive readability */
+#map .page-desc {
+  color: #d6e8f6 !important;
+}
+
+#map .archive-toolbar {
+  background: rgba(18, 48, 76, 0.92) !important;
+  border: 1px solid rgba(97, 231, 255, 0.22) !important;
+}
+
+#map .compare-table,
+#map .archive-table {
+  background: rgba(7, 24, 39, 0.96) !important;
+  color: #eaf6ff !important;
+}
+
+#map .archive-table th {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+}
+
+#map .archive-table td {
+  color: #d9eaf5 !important;
+  font-weight: 700 !important;
+  opacity: 1 !important;
+}
+
+#map .simple-page > .btn {
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.32);
+}

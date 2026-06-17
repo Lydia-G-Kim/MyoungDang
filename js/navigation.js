@@ -682,24 +682,24 @@ function getTaoMapPreviewPlaces(dealType) {
       image: "img/yongsan-prugio-summit.png"
     },
     {
-      name: "시티파크 오피스텔",
+      name: "시티파크 라이트룸",
       area: "한강로3가",
-      dealType: "매매",
-      propertyType: "오피스텔",
+      dealType: "전세",
+      propertyType: "투룸형",
       size: "59㎡",
-      roomType: "원룸~투룸형",
-      price: "4억~6억",
+      roomType: "투룸형",
+      price: "4.8억",
       score: 88,
       image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=900&q=80"
     },
     {
-      name: "용산시티하우스",
-      area: "한강로3가",
-      dealType: "매매",
-      propertyType: "아파트",
-      size: "75㎡",
+      name: "후암 슬로우하우스",
+      area: "후암동",
+      dealType: "월세",
+      propertyType: "원룸형",
+      size: "36㎡",
       roomType: "원룸형",
-      price: "2.4억~2.9억",
+      price: "1000/78",
       score: 84,
       image: "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=900&q=80"
     }
