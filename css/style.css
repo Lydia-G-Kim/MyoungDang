@@ -4754,3 +4754,22 @@ body {
   font-weight: 900 !important;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.32);
 }
+
+
+/* Tao Map selected archive contrast */
+#map .archive-table tr.selected-archive td,
+#map .archive-table tbody tr.selected-archive td {
+  color: #061322 !important;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  text-shadow: none !important;
+}
+
+
+/* Decision page bottom action readability */
+#decision .simple-page > .btn {
+  color: #ffffff !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.32);
+}
