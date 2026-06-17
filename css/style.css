@@ -4773,3 +4773,12 @@ body {
   font-weight: 900 !important;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.32);
 }
+
+
+/* Teo indoor option button readability */
+#teo .teo-option-buttons .teo-option {
+  font-size: 18px !important;
+  line-height: 1.25 !important;
+  padding: 17px 18px !important;
+  font-weight: 900 !important;
+}

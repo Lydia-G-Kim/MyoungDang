@@ -764,21 +764,24 @@ const teoOptions = {
     label: "일조량 영상",
     desc: "남향 기준 오전부터 오후까지 빛의 이동을 확인하는 실내 뷰입니다.",
     score: 86,
-    video: "video/sunlight.mp4"
+    video: "video/sunlight.mp4",
+    hasVideo: false
   },
   dust: {
     title: "미세먼지",
     label: "미세먼지 영상",
     desc: "외부 도로와 창호 위치를 기준으로 실내 유입 가능성을 보여주는 뷰입니다.",
     score: 81,
-    video: "video/finedust.mp4"
+    video: "video/finedust.mp4",
+    hasVideo: false
   },
   ventilation: {
     title: "환기",
     label: "환기 영상",
     desc: "창문 위치와 실내 동선을 기준으로 공기 흐름을 확인하는 뷰입니다.",
     score: 78,
-    video: "video/ventilation.mp4"
+    video: "video/KakaoTalk_Video_2026-06-17-16-31-50.mp4",
+    hasVideo: true
   }
 };
 
@@ -846,12 +849,20 @@ function changeTeoOption(optionId) {
   if (label) label.textContent = option.label;
   if (placeholder) {
     const span = placeholder.querySelector("span");
-    if (span) span.textContent = `${option.video} 파일을 넣으면 이 영역에서 재생됩니다.`;
+    if (span) span.textContent = option.hasVideo
+      ? "환기 시뮬레이션 영상을 재생합니다."
+      : `${option.video} 파일을 넣으면 이 영역에서 재생됩니다.`;
+    placeholder.style.display = option.hasVideo ? "none" : "flex";
   }
 
   if (source && video) {
     source.src = option.video;
     video.load();
+    if (option.hasVideo) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
   }
 }
 
