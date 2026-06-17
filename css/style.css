@@ -4780,5 +4780,19 @@ body {
   font-size: 18px !important;
   line-height: 1.25 !important;
   padding: 17px 18px !important;
+  font-weight: 500 !important;
+}
+
+#teo .teo-option-buttons .teo-option.active,
+#teo .teo-option-buttons .teo-option:hover {
+  font-size: 20px !important;
   font-weight: 900 !important;
+}
+
+#teo .teo-back-btn,
+#teo .teo-back-btn.active {
+  color: #ffffff !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.32);
 }
